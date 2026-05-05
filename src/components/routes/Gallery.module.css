@@ -1,18 +1,19 @@
 .container {
-  max-width: 1200px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .gallerySection {
-  padding: 60px 0;
-  background: white;
+  padding: 80px 0;
+  background: #fff;
 }
 
 .title {
-  font-size: 36px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 42px);
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-dark);
   text-align: center;
   margin-bottom: 30px;
 }
@@ -21,69 +22,69 @@
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
   flex-wrap: wrap;
 }
 
 .categoryBtn {
-  padding: 8px 20px;
-  border: 2px solid #ddd;
-  background: white;
-  color: #666;
-  border-radius: 4px;
+  padding: 9px 22px;
+  border: 1.5px solid #e2cf9e;
+  background: #fff;
+  color: var(--color-muted);
+  border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
+  transition: all 0.25s ease;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .categoryBtn:hover {
-  border-color: #c9a961;
-  color: #c9a961;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .categoryBtn.active {
-  background: #c9a961;
-  border-color: #c9a961;
-  color: white;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
 }
 
 .carouselContainer {
-  margin-bottom: 50px;
+  margin-bottom: 56px;
 }
 
 .galleryGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 18px;
 }
 
 .galleryItem {
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
-  height: 250px;
+  border-radius: 10px;
+  aspect-ratio: 4 / 3;
   cursor: pointer;
+  background: #f0f0f0;
 }
 
 .galleryItem img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .galleryItem:hover img {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,18 +97,23 @@
 }
 
 .viewBtn {
-  background: #c9a961;
-  color: white;
-  border: none;
-  padding: 10px 25px;
-  border-radius: 4px;
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 .viewBtn:hover {
-  background: #a88446;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-dark);
 }
 
 @media (max-width: 1024px) {
@@ -118,19 +124,16 @@
 
 @media (max-width: 768px) {
   .gallerySection {
-    padding: 40px 0;
+    padding: 60px 0;
   }
 
   .galleryGrid {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 540px) {
+  .galleryGrid {
     grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .galleryItem {
-    height: 200px;
-  }
-
-  .title {
-    font-size: 28px;
   }
 }

@@ -2,11 +2,11 @@ import styles from './Hero.module.css';
 
 export default function Hero({ title, description, backgroundImage, children }) {
   return (
-    <section 
+    <section
       className={styles.hero}
       style={backgroundImage ? { backgroundImage: `url(${backgroundImage})` } : {}}
     >
-      <div className={styles.overlay}></div>
+      <div className={styles.overlay} />
       <div className={styles.container}>
         <div className={styles.content}>
           {title && <h1 className={styles.title}>{title}</h1>}

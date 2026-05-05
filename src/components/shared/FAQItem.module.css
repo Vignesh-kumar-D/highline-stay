@@ -1,47 +1,60 @@
 .item {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border: 1px solid #ece4d3;
+  border-radius: 8px;
   margin-bottom: 12px;
   overflow: hidden;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  background: #fff;
 }
 
 .item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border-color: #e2cf9e;
 }
 
 .question {
   width: 100%;
-  padding: 18px 20px;
-  background: #f8f8f8;
+  padding: 18px 22px;
+  background: #fff;
   border: none;
   text-align: left;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
-  color: #333;
+  color: var(--color-dark);
   display: flex;
   align-items: center;
-  gap: 15px;
-  transition: background 0.3s ease;
+  gap: 16px;
+  transition: background 0.25s ease, color 0.25s ease;
+  font-family: inherit;
 }
 
 .question:hover {
-  background: #efefef;
+  background: #faf7f2;
 }
 
 .question.active {
-  background: #c9a961;
-  color: white;
+  background: #fff;
+  color: var(--color-accent-dark);
 }
 
 .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  font-weight: bold;
-  font-size: 18px;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #faf3e6;
+  color: var(--color-accent-dark);
+  font-weight: 700;
+  font-size: 16px;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.question.active .icon {
+  background: var(--color-accent);
+  color: #fff;
 }
 
 .text {
@@ -49,16 +62,15 @@
 }
 
 .answer {
-  padding: 20px;
-  background: #fafafa;
-  border-top: 1px solid #e0e0e0;
-  animation: slideDown 0.3s ease;
+  padding: 0 22px 22px 66px;
+  background: #fff;
+  animation: slideDown 0.25s ease;
 }
 
 .answer p {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.7;
+  color: var(--color-muted);
+  font-size: 14.5px;
+  line-height: 1.75;
 }
 
 @keyframes slideDown {
@@ -72,13 +84,15 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 540px) {
   .question {
     font-size: 14px;
-    padding: 15px;
+    padding: 16px 18px;
+    gap: 12px;
   }
 
   .answer {
-    padding: 15px;
+    padding: 0 18px 18px 54px;
+    font-size: 13.5px;
   }
 }

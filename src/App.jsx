@@ -2,12 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { BookingProvider } from './context/BookingContext';
 
-// Shared Components
 import Header from './components/shared/Header';
-import Navigation from './components/shared/Navigation';
 import Footer from './components/shared/Footer';
+import ContactBar from './components/shared/ContactBar';
 
-// Route Components
 import Home from './components/routes/Home';
 import Rooms from './components/routes/Rooms';
 import Services from './components/routes/Services';
@@ -20,7 +18,6 @@ function App() {
     <BookingProvider>
       <Router>
         <Header />
-        <Navigation />
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -31,6 +28,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
+        <ContactBar />
         <Footer />
       </Router>
     </BookingProvider>

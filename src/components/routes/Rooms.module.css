@@ -1,12 +1,12 @@
 .container {
-  max-width: 1200px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .roomsSection {
-  padding: 60px 0;
-  background: #fafafa;
+  padding: 80px 0;
+  background: var(--color-bg-soft);
 }
 
 .filterSection {
@@ -15,46 +15,49 @@
 }
 
 .filterTitle {
-  font-size: 24px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 32px);
   font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 20px;
+  color: var(--color-dark);
+  margin-bottom: 22px;
 }
 
 .filters {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .filterBtn {
-  padding: 10px 25px;
-  border: 2px solid #ddd;
-  background: white;
-  color: #666;
-  border-radius: 4px;
+  padding: 10px 22px;
+  border: 1.5px solid #e2cf9e;
+  background: #fff;
+  color: var(--color-muted);
+  border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
+  transition: all 0.25s ease;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .filterBtn:hover {
-  border-color: #c9a961;
-  color: #c9a961;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .filterBtn.active {
-  background: #c9a961;
-  border-color: #c9a961;
-  color: white;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
 }
 
 .roomsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 28px;
 }
 
 .noResults {
@@ -71,16 +74,16 @@
 }
 
 @media (max-width: 768px) {
+  .roomsSection {
+    padding: 60px 0;
+  }
+
   .roomsGrid {
     grid-template-columns: 1fr;
   }
 
-  .filters {
-    gap: 10px;
-  }
-
   .filterBtn {
-    padding: 8px 15px;
-    font-size: 13px;
+    padding: 8px 16px;
+    font-size: 12px;
   }
 }
