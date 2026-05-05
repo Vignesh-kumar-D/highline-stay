@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Mountain View",
+    "description": "Stunning panoramic views of Kodaikanal's majestic mountains from your private balcony",
+    "icon": "🏔️"
+  },
+  {
+    "id": 2,
+    "name": "Private Balcony",
+    "description": "Exclusive outdoor space to relax and enjoy nature's beauty in solitude",
+    "icon": "🪟"
+  },
+  {
+    "id": 3,
+    "name": "Fireplace",
+    "description": "Cozy fireplace to warm up during cool mountain evenings",
+    "icon": "🔥"
+  },
+  {
+    "id": 4,
+    "name": "AC & Heating",
+    "description": "Climate control for comfort in all seasons",
+    "icon": "❄️"
+  },
+  {
+    "id": 5,
+    "name": "High Speed WiFi",
+    "description": "Stay connected with reliable internet throughout the cottage",
+    "icon": "📡"
+  },
+  {
+    "id": 6,
+    "name": "Hot Water",
+    "description": "24/7 hot water supply for comfort",
+    "icon": "💧"
+  },
+  {
+    "id": 7,
+    "name": "Couple Swing",
+    "description": "Romantic couple swing in private courtyard (selected cottages)",
+    "icon": "🪴"
+  },
+  {
+    "id": 8,
+    "name": "Natural Surroundings",
+    "description": "Eco-friendly design that complements the natural environment",
+    "icon": "🌿"
+  }
+]

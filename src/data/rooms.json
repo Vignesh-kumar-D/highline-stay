@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Family Cottage",
+    "type": "family",
+    "description": "Spacious family cottages perfect for group vacations with all modern amenities",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "capacity": 6,
+    "price": "₹5000/night",
+    "amenities": ["AC", "Hot Water", "TV", "WiFi", "Balcony with Mountain View", "Fireplace", "Heater"],
+    "images": [
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/TFC05656-1-1024x683.jpg",
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/TFC05661-1-1024x683.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Couple's Cottage",
+    "type": "couples",
+    "description": "Romantic cottages designed for couples with private balconies and couple swing",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "capacity": 2,
+    "price": "₹3500/night",
+    "amenities": ["AC", "Hot Water", "TV", "WiFi", "Private Balcony", "Couple Swing", "Fireplace"],
+    "images": [
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/TFC05940-2-1024x683.jpg",
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/TFC05852-2-1024x683.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Deluxe Family Suite",
+    "type": "family",
+    "description": "Premium family suite with enhanced amenities and stunning mountain views",
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "capacity": 8,
+    "price": "₹7500/night",
+    "amenities": ["AC", "Hot Water", "TV", "WiFi", "Large Balcony", "Fireplace", "Heater", "Kitchen Access"],
+    "images": [
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/TFC05390-3-1024x683.jpg",
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/New-Project-1-1024x534.jpg"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Honeymoon Suite",
+    "type": "couples",
+    "description": "Luxury honeymoon suite with premium amenities and exclusive couple experiences",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "capacity": 2,
+    "price": "₹5000/night",
+    "amenities": ["AC", "Hot Water", "Premium TV", "WiFi", "Luxury Balcony", "Couple Swing", "Fireplace", "Spa Bath"],
+    "images": [
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/TFC05656-1-1024x683.jpg",
+      "https://highlineluxuriousstay.in/wp-content/uploads/2024/05/TFC05661-1-1024x683.jpg"
+    ]
+  }
+]

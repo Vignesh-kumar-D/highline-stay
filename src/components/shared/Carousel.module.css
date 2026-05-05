@@ -1,0 +1,61 @@
+.carouselContainer {
+  width: 100%;
+  margin: 30px 0;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.swiper {
+  width: 100%;
+  max-height: 500px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Override Swiper default styles */
+:global(.swiper-button-next),
+:global(.swiper-button-prev) {
+  color: #c9a961 !important;
+  background: rgba(0, 0, 0, 0.3);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+:global(.swiper-button-next::after),
+:global(.swiper-button-prev::after) {
+  font-size: 20px !important;
+}
+
+:global(.swiper-pagination-bullet) {
+  background: rgba(255, 255, 255, 0.5) !important;
+}
+
+:global(.swiper-pagination-bullet-active) {
+  background: #c9a961 !important;
+}
+
+@media (max-width: 768px) {
+  .swiper {
+    max-height: 350px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  :global(.swiper-button-next),
+  :global(.swiper-button-prev) {
+    width: 40px;
+    height: 40px;
+  }
+}

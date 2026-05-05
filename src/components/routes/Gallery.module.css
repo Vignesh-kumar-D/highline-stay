@@ -1,0 +1,136 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.gallerySection {
+  padding: 60px 0;
+  background: white;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.categoryFilter {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.categoryBtn {
+  padding: 8px 20px;
+  border: 2px solid #ddd;
+  background: white;
+  color: #666;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.categoryBtn:hover {
+  border-color: #c9a961;
+  color: #c9a961;
+}
+
+.categoryBtn.active {
+  background: #c9a961;
+  border-color: #c9a961;
+  color: white;
+}
+
+.carouselContainer {
+  margin-bottom: 50px;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.galleryItem {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  height: 250px;
+  cursor: pointer;
+}
+
+.galleryItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.galleryItem:hover img {
+  transform: scale(1.1);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.galleryItem:hover .overlay {
+  opacity: 1;
+}
+
+.viewBtn {
+  background: #c9a961;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.viewBtn:hover {
+  background: #a88446;
+}
+
+@media (max-width: 1024px) {
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .gallerySection {
+    padding: 40px 0;
+  }
+
+  .galleryGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .galleryItem {
+    height: 200px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}

@@ -1,0 +1,73 @@
+.contactBar {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  gap: 15px;
+  z-index: 999;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: #c9a961;
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  border: none;
+}
+
+.btn:hover {
+  background: #a88446;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.icon {
+  font-size: 20px;
+  display: inline-block;
+}
+
+.label {
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .contactBar {
+    bottom: 20px;
+    right: 20px;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  .icon {
+    font-size: 16px;
+  }
+
+  .label {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .contactBar {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 50px;
+    height: 50px;
+    justify-content: center;
+    padding: 0;
+  }
+}
