@@ -1,0 +1,23 @@
+name = "highline-stay-api"
+main = "worker/index.js"
+compatibility_date = "2024-09-25"
+workers_dev = true
+
+# Local dev: wrangler will create a local SQLite-backed D1 in .wrangler/.
+# Remote: run `wrangler d1 create highline-stay` and paste the returned id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "highline-stay"
+database_id = "REPLACE_WITH_REAL_D1_ID_AFTER_CREATE"
+migrations_dir = "migrations"
+
+[vars]
+# Public/non-secret config. Override with `wrangler secret put` for sensitive ones.
+ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173"
+FROM_EMAIL = "dvigneshkumar3@gmail.com"
+FROM_NAME = "Highline Luxurious Stay"
+OTP_EXPIRY_MINUTES = "10"
+OTP_MAX_ATTEMPTS = "5"
+# When TEST_MODE = "true" the worker also returns the OTP in the response
+# (handy for local dev before SendGrid is configured). Set to "false" in prod.
+TEST_MODE = "true"

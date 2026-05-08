@@ -5,6 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:worker": "wrangler dev --local --persist-to .wrangler/state",
+    "dev:all": "concurrently -n web,worker -c yellow,cyan \"npm:dev\" \"npm:dev:worker\"",
+    "db:migrate:local": "wrangler d1 migrations apply highline-stay --local --persist-to .wrangler/state",
+    "db:migrate:remote": "wrangler d1 migrations apply highline-stay --remote",
+    "db:list:local": "wrangler d1 execute highline-stay --local --persist-to .wrangler/state --command \"SELECT name FROM sqlite_master WHERE type='table';\"",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -19,6 +24,8 @@
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^6.0.1",
-    "vite": "^8.0.11"
+    "concurrently": "^9.2.1",
+    "vite": "^8.0.11",
+    "wrangler": "^4.90.0"
   }
 }

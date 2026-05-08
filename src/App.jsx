@@ -12,6 +12,7 @@ import Services from './components/routes/Services';
 import Gallery from './components/routes/Gallery';
 import About from './components/routes/About';
 import Contact from './components/routes/Contact';
+import BookingConfirmation from './components/routes/BookingConfirmation';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/booking/:bookingRef" element={<BookingConfirmation />} />
           </Routes>
         </main>
         <ContactBar />
