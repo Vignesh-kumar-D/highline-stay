@@ -5,7 +5,7 @@ import {
   hashOtp,
   generateBookingRef,
 } from './lib/crypto.js';
-import { sendOtpEmail } from './lib/sendgrid.js';
+import { sendOtpEmail } from './lib/resend.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -69,77 +69,104 @@ export async function handleSendOtp(request, env) {
 
   const ip = getClientIp(request);
 
-  const recent = await env.DB.prepare(
-    `SELECT COUNT(*) AS c FROM otp_challenges
-     WHERE email = ? AND created_at >= datetime('now', '-1 hour')`
-  )
-    .bind(email)
-    .first();
+  try {
+    const recent = await env.DB.prepare(
+      `SELECT COUNT(*) AS c FROM otp_challenges
+       WHERE email = ? AND created_at >= datetime('now', '-1 hour')`
+    )
+      .bind(email)
+      .first();
 
-  if ((recent?.c ?? 0) >= RATE_LIMIT_PER_EMAIL_PER_HOUR) {
-    return jsonError(
-      'Too many OTP requests for this email. Please try again later.',
-      429
-    );
-  }
-
-  const code = generateOtp();
-  const salt = generateSalt();
-  const codeHash = await hashOtp({
-    pepper: env.OTP_PEPPER || '',
-    salt,
-    code,
-  });
-  const expiryMinutes = parseInt(env.OTP_EXPIRY_MINUTES || '10', 10);
-
-  const meta = {
-    checkIn: body.checkIn,
-    checkOut: body.checkOut,
-    adults,
-    children,
-    ip,
-  };
-
-  await env.DB.prepare(
-    `INSERT INTO otp_challenges (email, purpose, code_hash, salt, expires_at, metadata_json)
-     VALUES (?, 'booking_inquiry', ?, ?, datetime('now', ?), ?)`
-  )
-    .bind(email, codeHash, salt, `+${expiryMinutes} minutes`, JSON.stringify(meta))
-    .run();
-
-  const testMode = String(env.TEST_MODE || '').toLowerCase() === 'true';
-  let emailSent = false;
-  let sendError = null;
-
-  if (env.SENDGRID_API_KEY && env.FROM_EMAIL) {
-    try {
-      await sendOtpEmail({ env, toEmail: email, code, expiryMinutes });
-      emailSent = true;
-    } catch (err) {
-      console.error('SendGrid error:', err && err.message);
-      sendError = err && err.message ? String(err.message) : 'SendGrid send failed';
+    if ((recent?.c ?? 0) >= RATE_LIMIT_PER_EMAIL_PER_HOUR) {
+      return jsonError(
+        'Too many OTP requests for this email. Please try again later.',
+        429
+      );
     }
-  }
 
-  if (!emailSent && !testMode) {
-    return jsonError(
-      sendError || 'Email service not configured. Please contact support.',
-      502
-    );
-  }
+    const code = generateOtp();
+    const salt = generateSalt();
+    const codeHash = await hashOtp({
+      pepper: env.OTP_PEPPER || '',
+      salt,
+      code,
+    });
+    const expiryMinutes = parseInt(env.OTP_EXPIRY_MINUTES || '10', 10);
 
-  if (!emailSent && testMode) {
-    console.log(`[TEST_MODE] OTP for ${email} = ${code}`);
-  }
+    const meta = {
+      checkIn: body.checkIn,
+      checkOut: body.checkOut,
+      adults,
+      children,
+      ip,
+    };
 
-  const response = { ok: true, expiresInMinutes: expiryMinutes, emailSent };
-  if (testMode) {
-    response.testMode = true;
-    response.devCode = code;
-    if (sendError) response.sendError = sendError;
-  }
+    await env.DB.prepare(
+      `INSERT INTO otp_challenges (email, purpose, code_hash, salt, expires_at, metadata_json)
+       VALUES (?, 'booking_inquiry', ?, ?, datetime('now', ?), ?)`
+    )
+      .bind(
+        email,
+        codeHash,
+        salt,
+        `+${expiryMinutes} minutes`,
+        JSON.stringify(meta)
+      )
+      .run();
 
-  return json(response);
+    const testMode = String(env.TEST_MODE || '').toLowerCase() === 'true';
+    let emailSent = false;
+    let sendError = null;
+
+    const hasEmailConfig =
+      Boolean(env.RESEND_API_KEY) && Boolean(env.FROM_EMAIL);
+
+    if (env.RESEND_API_KEY && env.FROM_EMAIL) {
+      try {
+        await sendOtpEmail({ env, toEmail: email, code, expiryMinutes });
+        emailSent = true;
+      } catch (err) {
+        console.error('Resend error:', err && err.message);
+        sendError =
+          err && err.message ? String(err.message) : 'Resend send failed';
+      }
+    }
+
+    if (!emailSent && !testMode) {
+      const message =
+        sendError ||
+        (!hasEmailConfig
+          ? 'Email service not configured: set Worker secret RESEND_API_KEY with wrangler secret put RESEND_API_KEY (or use .dev.vars locally). Deployed Workers do not read .env.'
+          : 'Email delivery failed. Please try again.');
+      return jsonError(message, 502);
+    }
+
+    if (!emailSent && testMode) {
+      console.log(`[TEST_MODE] OTP for ${email} = ${code}`);
+    }
+
+    const response = { ok: true, expiresInMinutes: expiryMinutes, emailSent };
+    if (testMode) {
+      response.testMode = true;
+      response.devCode = code;
+      if (sendError) response.sendError = sendError;
+    }
+
+    return json(response);
+  } catch (err) {
+    console.error('handleSendOtp error:', err);
+    const testMode = String(env.TEST_MODE || '').toLowerCase() === 'true';
+    const hint =
+      testMode &&
+      typeof err.message === 'string' &&
+      /no such table|unable to open| SQLITE_/i.test(err.message)
+        ? ' D1 migrations may be missing — run npm run db:migrate:local (or db:migrate:remote).'
+        : '';
+    const message = testMode
+      ? `${err.message || err}${hint}`
+      : 'Could not send verification code. Please try again.';
+    return jsonError(message, 500);
+  }
 }
 
 export async function handleVerifyOtp(request, env) {
@@ -201,7 +228,16 @@ export async function handleVerifyOtp(request, env) {
     .bind(challenge.id)
     .run();
 
-  const meta = challenge.metadata_json ? JSON.parse(challenge.metadata_json) : {};
+  const metaRaw = challenge.metadata_json;
+  let meta = {};
+  if (metaRaw) {
+    try {
+      meta = JSON.parse(metaRaw);
+    } catch {
+      console.error('Invalid metadata_json for otp challenge id', challenge.id);
+      return jsonError('Invalid booking data. Request a new code.', 400);
+    }
+  }
   let bookingRef = null;
   let lastErr = null;
 

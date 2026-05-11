@@ -26,10 +26,13 @@ migrations_dir = "migrations"
 [vars]
 # Public/non-secret config. Override with `wrangler secret put` for sensitive ones.
 ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://cloudflare-workers-autoconfig-highline-stay.dvigneshkumar99.workers.dev,https://highline-stay.dvigneshkumar99.workers.dev"
-FROM_EMAIL = "dvigneshkumar3@gmail.com"
+# Resend "from" must be a sender they allow. Use onboarding@resend.dev for dev/sandbox
+# (only works for limited test sends per Resend docs). For production, verify your own domain
+# in Resend and set FROM_EMAIL to e.g. noreply@yourdomain.com
+FROM_EMAIL = "onboarding@resend.dev"
 FROM_NAME = "Highline Luxurious Stay"
 OTP_EXPIRY_MINUTES = "10"
 OTP_MAX_ATTEMPTS = "5"
 # When TEST_MODE = "true" the worker also returns the OTP in the response
-# (handy for local dev before SendGrid is configured). Set to "false" in prod.
+# (handy for local dev before Resend is configured). Set to "false" in prod.
 TEST_MODE = "true"

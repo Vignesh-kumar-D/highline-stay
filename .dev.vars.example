@@ -1,8 +1,8 @@
 # Copy this file to `.dev.vars` for local `wrangler dev`.
 # `.dev.vars` is gitignored. Do NOT commit real secrets.
 
-# SendGrid HTTP API key with at least "Mail Send" permission.
-SENDGRID_API_KEY=SG.replace-me
+# Resend API key (Dashboard → API Keys). Use a verified domain for FROM_EMAIL in production.
+RESEND_API_KEY=re_xxxxxxxx
 
 # Random string used as pepper when hashing OTP codes. Use a long random value.
 OTP_PEPPER=replace-with-long-random-string

@@ -1,14 +1,15 @@
-const ENDPOINT = 'https://api.sendgrid.com/v3/mail/send';
+const ENDPOINT = 'https://api.resend.com/emails';
 
 export async function sendOtpEmail({ env, toEmail, code, expiryMinutes }) {
-  if (!env.SENDGRID_API_KEY) {
-    throw new Error('SENDGRID_API_KEY is not configured');
+  if (!env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not configured');
   }
   if (!env.FROM_EMAIL) {
     throw new Error('FROM_EMAIL is not configured');
   }
 
   const fromName = env.FROM_NAME || 'Highline Luxurious Stay';
+  const from = `${fromName} <${env.FROM_EMAIL}>`;
   const subject = `Your verification code: ${code}`;
   const text = [
     `Your Highline Luxurious Stay verification code is ${code}.`,
@@ -27,28 +28,24 @@ export async function sendOtpEmail({ env, toEmail, code, expiryMinutes }) {
     </div>
   `;
 
-  const body = {
-    personalizations: [{ to: [{ email: toEmail }] }],
-    from: { email: env.FROM_EMAIL, name: fromName },
-    subject,
-    content: [
-      { type: 'text/plain', value: text },
-      { type: 'text/html', value: html },
-    ],
-  };
-
   const res = await fetch(ENDPOINT, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${env.SENDGRID_API_KEY}`,
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      from,
+      to: [toEmail],
+      subject,
+      text,
+      html,
+    }),
   });
 
   if (!res.ok) {
     const errText = await res.text();
-    throw new Error(`SendGrid send failed (${res.status}): ${errText}`);
+    throw new Error(`Resend send failed (${res.status}): ${errText}`);
   }
   return true;
 }

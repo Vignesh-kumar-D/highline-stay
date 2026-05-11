@@ -6,34 +6,31 @@ This document covers the email-OTP booking flow added on top of the React site.
 
 - **Frontend**: Vite + React (this repo, `src/`)
 - **API**: Cloudflare Worker (`worker/`) + Cloudflare D1 (SQLite)
-- **Email**: SendGrid HTTP API (`v3/mail/send`)
+- **Email**: [Resend](https://resend.com) HTTP API (`POST /emails`)
 
 ```
 [Browser] -> [Vite dev :5173]  --(/api/* proxied)-->  [Worker :8787]  ->  [D1 local sqlite]
                                                               |
-                                                              +-->  [SendGrid] (only if keys configured)
+                                                              +-->  [Resend] (only if keys configured)
 ```
 
 **Production (single Worker):** `wrangler.toml` has **`[build] command = "npm run build"`**, so `npx wrangler deploy` / `npm run deploy` runs Vite first and `./dist/` always exists—even if CI only invokes Wrangler (no separate build step). Wrangler **[assets]** serves the SPA with **SPA fallback**; only `/api/*` hits `worker/index.js`. Same `*.workers.dev` origin lets `VITE_API_BASE_URL` stay empty (`/api/...`).
 
-The frontend never talks to SendGrid directly. The Worker holds the API key.
+The frontend never talks to Resend directly. The Worker holds the API key.
 
 ---
 
-## What you give me from SendGrid
+## What you need from Resend
 
-You will need exactly two values in your `.dev.vars` (local) and as Worker secrets (production):
+Two values in **`.dev.vars`** (local) and as **Worker secrets** (production):
 
-1. **`SENDGRID_API_KEY`**
-   - In SendGrid: **Settings → API Keys → Create API Key**
-   - Permissions: choose **Restricted Access** and enable only **Mail Send → Full Access** (everything else can stay off).
-   - Copy the value (`SG.xxxxx…`). You will not be able to view it again.
+1. **`RESEND_API_KEY`**
+   - In [Resend](https://resend.com): **API Keys** → create a key (starts with `re_`).
+   - [Resend API docs — send email](https://resend.com/docs/api-reference/emails/send-email)
 
-2. **A verified sender** so SendGrid will accept your `from` address.
-   - Easiest: **Settings → Sender Authentication → Verify a Single Sender**
-   - Use `dvigneshkumar3@gmail.com`. SendGrid will send a verification email to that address. Click the link.
-   - Once verified, the Worker config can keep `FROM_EMAIL = dvigneshkumar3@gmail.com`.
-   - (Better long-term: domain authentication on a custom domain — DKIM/SPF — but Single Sender is enough to test.)
+2. **`FROM_EMAIL`** (`wrangler.toml` → `[vars]`) must use an address **Resend allows** for sending:
+   - **Sandbox/testing:** This repo defaults **`FROM_EMAIL = onboarding@resend.dev`**. Resend may only deliver **to** addresses they allow in that mode (often your Resend account email or addresses you add in the dashboard).
+   - **Production:** add and verify **your domain** in Resend, then set `FROM_EMAIL` (and optional `FROM_NAME`) to an address on that domain — you cannot send *from* `@gmail.com` through Resend unless Google’s domain is verified in *your* Resend account (normally you use your own domain).
 
 That's it. Optional values that already have sane defaults: `FROM_NAME`, `OTP_EXPIRY_MINUTES`, `OTP_MAX_ATTEMPTS`, `ALLOWED_ORIGINS`, `TEST_MODE`.
 
@@ -50,7 +47,7 @@ cp .dev.vars.example .dev.vars
 cp .env.example .env.local   # optional; vite proxy works without it
 
 # 3. (Optional, for real email) edit .dev.vars and paste:
-#    SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxx
+#    RESEND_API_KEY=re_xxxxxxxxxxxxxxx
 #    OTP_PEPPER=any-long-random-string
 
 # 4. Apply D1 migrations to the LOCAL sqlite store
@@ -80,12 +77,12 @@ npm run dev
 
 Vite is configured to proxy `/api/*` to the Worker, so the React code can just call `/api/otp/send` etc.
 
-### Test mode (no SendGrid yet)
+### Test mode (no Resend yet)
 
 `wrangler.toml` ships with `TEST_MODE = "true"`. While it is `true`:
 
-- If `SENDGRID_API_KEY` is missing, the Worker logs the OTP to its terminal and **also returns it in the response** (`devCode`). The frontend modal will display it as "Test code".
-- This lets you exercise the entire flow before you've signed up for SendGrid.
+- If `RESEND_API_KEY` is missing, the Worker logs the OTP to its terminal and **also returns it in the response** (`devCode`). The frontend modal will display it as "Test code".
+- This lets you exercise the entire flow before Resend is configured.
 - **Set `TEST_MODE = "false"` before deploying to production.**
 
 ### End-to-end smoke test
@@ -93,7 +90,7 @@ Vite is configured to proxy `/api/*` to the Worker, so the React code can just c
 1. Open http://localhost:5173.
 2. Pick check-in / check-out, click **Check Availability**.
 3. Enter an email, click **Send verification code**.
-4. Either look at the modal (Test mode) or your inbox (real SendGrid).
+4. Either look at the modal (Test mode) or your inbox (Resend).
 5. Type the 6 digits, click **Verify & confirm**.
 6. You'll see a booking reference (e.g. `HLS-AB23X9`) and a **View booking** button that opens `/booking/HLS-...`.
 
@@ -110,7 +107,7 @@ npx wrangler d1 create highline-stay
 npm run db:migrate:remote
 
 # 3. Set Worker secrets (interactive)
-npx wrangler secret put SENDGRID_API_KEY
+npx wrangler secret put RESEND_API_KEY
 npx wrangler secret put OTP_PEPPER
 
 # 4. Update [vars] in wrangler.toml
