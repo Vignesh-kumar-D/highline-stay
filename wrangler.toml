@@ -3,6 +3,10 @@ main = "worker/index.js"
 compatibility_date = "2024-09-25"
 workers_dev = true
 
+# Runs before `wrangler dev` / `wrangler deploy` so `./dist` exists even when CI only runs `npx wrangler deploy`.
+[build]
+command = "npm run build"
+
 # React SPA built to dist/ via `npm run build`. Worker handles /api/* only; everything
 # else is static assets + single-page-application fallback (client-side routing).
 [assets]

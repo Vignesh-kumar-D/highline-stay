@@ -11,7 +11,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply highline-stay --remote",
     "db:list:local": "wrangler d1 execute highline-stay --local --persist-to .wrangler/state --command \"SELECT name FROM sqlite_master WHERE type='table';\"",
     "build": "vite build",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "wrangler deploy",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,7 +19,7 @@
     "react-accessible-accordion": "^5.0.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",
-    "swiper": "^11.0.0"
+    "swiper": "^12.1.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

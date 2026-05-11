@@ -14,7 +14,7 @@ This document covers the email-OTP booking flow added on top of the React site.
                                                               +-->  [SendGrid] (only if keys configured)
 ```
 
-**Production (single Worker):** `npm run build` produces `dist/`. Wrangler **[assets]** serves the React SPA from `dist/` with **SPA fallback**; only `/api/*` is handled by `worker/index.js`. Deploy with `npm run deploy` (build + `wrangler deploy`). The site and API share the same `*.workers.dev` origin, so `VITE_API_BASE_URL` can stay empty and the app calls `/api/...` directly.
+**Production (single Worker):** `wrangler.toml` has **`[build] command = "npm run build"`**, so `npx wrangler deploy` / `npm run deploy` runs Vite first and `./dist/` always exists—even if CI only invokes Wrangler (no separate build step). Wrangler **[assets]** serves the SPA with **SPA fallback**; only `/api/*` hits `worker/index.js`. Same `*.workers.dev` origin lets `VITE_API_BASE_URL` stay empty (`/api/...`).
 
 The frontend never talks to SendGrid directly. The Worker holds the API key.
 
@@ -115,13 +115,15 @@ npx wrangler secret put OTP_PEPPER
 
 # 4. Update [vars] in wrangler.toml
 #    - TEST_MODE = "false"
-#    - ALLOWED_ORIGINS = "https://your-pages-domain"
+#    - ALLOWED_ORIGINS includes any browser origin that calls your API cross-origin (optional if UI and API share the same Worker hostname)
 
-# 5. Deploy worker
-npx wrangler deploy
+# 5. Deploy (runs `npm run build` via wrangler [build], then uploads worker + assets)
+npm run deploy
+# or equivalently:
+# npx wrangler deploy
 
-# 6. Cloudflare Pages: connect this repo, set build = `npm run build`,
-#    output dir = `dist`, env var VITE_API_BASE_URL = your worker URL.
+# Split hosting (optional): if the UI lived on Pages and the API on Workers, you'd set VITE_API_BASE_URL
+# and add that Pages URL to ALLOWED_ORIGINS. With assets on the Worker this is not required.
 ```
 
 ---
