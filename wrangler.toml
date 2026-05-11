@@ -8,12 +8,12 @@ workers_dev = true
 [[d1_databases]]
 binding = "DB"
 database_name = "highline-stay"
-database_id = "REPLACE_WITH_REAL_D1_ID_AFTER_CREATE"
+database_id = "2cbc1736-0d42-4223-8bc4-d8669709a4ae"
 migrations_dir = "migrations"
 
 [vars]
 # Public/non-secret config. Override with `wrangler secret put` for sensitive ones.
-ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173"
+ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://cloudflare-workers-autoconfig-highline-stay.dvigneshkumar99.workers.dev"
 FROM_EMAIL = "dvigneshkumar3@gmail.com"
 FROM_NAME = "Highline Luxurious Stay"
 OTP_EXPIRY_MINUTES = "10"
