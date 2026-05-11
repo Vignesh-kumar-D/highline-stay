@@ -3,6 +3,14 @@ main = "worker/index.js"
 compatibility_date = "2024-09-25"
 workers_dev = true
 
+# React SPA built to dist/ via `npm run build`. Worker handles /api/* only; everything
+# else is static assets + single-page-application fallback (client-side routing).
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
+# Invoke this Worker script only for API routes; all other URLs are served by assets first.
+run_worker_first = [ "/api/*" ]
+
 # Local dev: wrangler will create a local SQLite-backed D1 in .wrangler/.
 # Remote: run `wrangler d1 create highline-stay` and paste the returned id below.
 [[d1_databases]]
@@ -13,7 +21,7 @@ migrations_dir = "migrations"
 
 [vars]
 # Public/non-secret config. Override with `wrangler secret put` for sensitive ones.
-ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://cloudflare-workers-autoconfig-highline-stay.dvigneshkumar99.workers.dev"
+ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://cloudflare-workers-autoconfig-highline-stay.dvigneshkumar99.workers.dev,https://highline-stay.dvigneshkumar99.workers.dev"
 FROM_EMAIL = "dvigneshkumar3@gmail.com"
 FROM_NAME = "Highline Luxurious Stay"
 OTP_EXPIRY_MINUTES = "10"

@@ -14,6 +14,8 @@ This document covers the email-OTP booking flow added on top of the React site.
                                                               +-->  [SendGrid] (only if keys configured)
 ```
 
+**Production (single Worker):** `npm run build` produces `dist/`. Wrangler **[assets]** serves the React SPA from `dist/` with **SPA fallback**; only `/api/*` is handled by `worker/index.js`. Deploy with `npm run deploy` (build + `wrangler deploy`). The site and API share the same `*.workers.dev` origin, so `VITE_API_BASE_URL` can stay empty and the app calls `/api/...` directly.
+
 The frontend never talks to SendGrid directly. The Worker holds the API key.
 
 ---

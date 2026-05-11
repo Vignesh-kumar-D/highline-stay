@@ -17,7 +17,8 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (request.method === 'OPTIONS') {
+    // OPTIONS preflight only for API (static routes don't hit this Worker unless matched below).
+    if (request.method === 'OPTIONS' && url.pathname.startsWith('/api/')) {
       return handlePreflight(request, env);
     }
 
@@ -40,6 +41,7 @@ export default {
       }
     }
 
+    // Hit when a request reaches the Worker without matching any /api handler.
     return applyCors(jsonError('Not found', 404), request, env);
   },
 };

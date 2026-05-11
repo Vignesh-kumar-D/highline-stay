@@ -11,6 +11,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply highline-stay --remote",
     "db:list:local": "wrangler d1 execute highline-stay --local --persist-to .wrangler/state --command \"SELECT name FROM sqlite_master WHERE type='table';\"",
     "build": "vite build",
+    "deploy": "npm run build && wrangler deploy",
     "preview": "vite preview"
   },
   "dependencies": {
